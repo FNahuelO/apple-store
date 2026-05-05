@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Apple La Union
 
-## Getting Started
+Plataforma ecommerce para tienda de celulares estilo Apple reseller.
 
-First, run the development server:
+Incluye:
+- Frontend de catalogo con stock real
+- Backend API con Next.js Route Handlers
+- Base de datos PostgreSQL con Prisma
+- Panel de administracion (login + alta/baja de productos)
+- Subida real de fotos a Cloudinary
+- Sistema de consultas por WhatsApp
+- Sistema de canje (solicitudes guardadas en DB)
+
+## Requisitos
+
+- Node 20+
+- PostgreSQL 15+
+- Cuenta de Cloudinary
+
+## Configuracion
+
+1. Copiar variables:
+
+```bash
+cp .env.example .env
+```
+
+2. Completar `.env` con tus credenciales reales.
+
+3. Aplicar migracion:
+
+```bash
+npm run db:migrate
+```
+
+4. Generar cliente Prisma:
+
+```bash
+npm run db:generate
+```
+
+5. Crear admin inicial:
+
+```bash
+npm run db:seed
+```
+
+## Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Tienda publica: `http://localhost:3000`
+- Canje: `http://localhost:3000/canje`
+- Admin: `http://localhost:3000/admin/login`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Despliegue recomendado
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Frontend/API: Vercel
+- Base de datos: Neon/Supabase/Render PostgreSQL
+- Imagenes: Cloudinary
 
-## Learn More
+### Checklist para Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Importar el repo en Vercel.
+2. En Project Settings -> Environment Variables, cargar las variables de `.env.example`.
+3. Configurar `DATABASE_URL` apuntando a una base PostgreSQL de produccion.
+4. Deploy (el proyecto ya ejecuta `prisma generate` automaticamente en build).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Variables requeridas en Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `NEXT_PUBLIC_WHATSAPP_NUMBER`
 
-## Deploy on Vercel
+Variables opcionales (para seed de admin):
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `ADMIN_NAME`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Antes de deploy:
+- Ejecuta `npm run build` localmente
+- Verifica login admin, alta de productos, subida de imagen y formulario de canje
