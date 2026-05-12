@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "prisma generate && pnpm --dir frontend dev",
     "build": "prisma generate && pnpm --dir frontend build",
-    "vercel-build": "prisma generate && pnpm --dir frontend build",
+    "vercel-build": "prisma generate && VERCEL=1 pnpm --dir frontend build",
     "start": "pnpm --dir frontend start",
     "postinstall": "prisma generate",
     "lint": "pnpm --dir frontend lint",
