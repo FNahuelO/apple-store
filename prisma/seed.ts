@@ -1,7 +1,8 @@
-import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client";
+import "./load-env";
+import { PrismaClient } from "../frontend/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
+import { getDefaultSiteSettings } from "../frontend/lib/site-settings";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -190,6 +191,55 @@ const productsSeed = [
   },
 ];
 
+/** Teléfonos fijos de demo: al re-ejecutar el seed se borran y recrean estas filas. */
+const DEMO_TRADE_IN_PHONES = ["5493516001001", "5493516001002", "5493516001003"] as const;
+
+/** Valores de `condition` alineados con el formulario público `/canje` (Select). */
+const tradeInsSeed = [
+  {
+    fullName: "María González",
+    phone: DEMO_TRADE_IN_PHONES[0],
+    email: "maria.demo@ejemplo.com",
+    city: "La Unión",
+    brand: "Apple",
+    model: "iPhone 13",
+    storage: "128GB",
+    condition: "excelente",
+    batteryHealth: 88,
+    details: "Caja original, sin reparaciones. Pantalla impecable.",
+    desiredModel: "iPhone 15 128GB",
+    status: "PENDING" as const,
+  },
+  {
+    fullName: "Lucas Fernández",
+    phone: DEMO_TRADE_IN_PHONES[1],
+    email: "lucas.demo@ejemplo.com",
+    city: "Córdoba",
+    brand: "Apple",
+    model: "iPhone 12",
+    storage: "64GB",
+    condition: "muy-bueno",
+    batteryHealth: 85,
+    details: "Pequeñas marcas en marco. Batería original.",
+    desiredModel: "iPhone 14",
+    status: "REVIEWED" as const,
+  },
+  {
+    fullName: "Ana Ruiz",
+    phone: DEMO_TRADE_IN_PHONES[2],
+    email: null,
+    city: "La Unión",
+    brand: "Apple",
+    model: "iPhone 11",
+    storage: "128GB",
+    condition: "bueno",
+    batteryHealth: 82,
+    details: "Interesada en canje por modelo más nuevo.",
+    desiredModel: "iPhone 13 Pro",
+    status: "PENDING" as const,
+  },
+];
+
 async function main() {
   const email = process.env.ADMIN_EMAIL;
   const password = process.env.ADMIN_PASSWORD;
@@ -214,6 +264,14 @@ async function main() {
     console.warn(
       "ADMIN_EMAIL o ADMIN_PASSWORD no configurados. Se omite el seeding de admin."
     );
+  }
+
+  const siteRow = await prisma.siteSettings.findUnique({ where: { id: 1 } });
+  if (!siteRow) {
+    await prisma.siteSettings.create({
+      id: 1,
+      data: getDefaultSiteSettings(),
+    });
   }
 
   for (const product of productsSeed) {
@@ -255,6 +313,17 @@ async function main() {
       },
     });
   }
+
+  await prisma.tradeInRequest.deleteMany({
+    where: { phone: { in: [...DEMO_TRADE_IN_PHONES] } },
+  });
+  await prisma.tradeInRequest.createMany({ data: tradeInsSeed });
+
+  console.log(
+    `Seed listo: ${productsSeed.length} productos, ${tradeInsSeed.length} solicitudes de canje demo, admin ${
+      email ? "actualizado" : "omitido"
+    }.`,
+  );
 }
 
 main()

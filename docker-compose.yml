@@ -1,0 +1,23 @@
+# PostgreSQL local para desarrollo (Apple La Unión)
+# Uso: `pnpm db:up` en la raíz del repo, luego `pnpm db:migrate` y `pnpm db:seed`.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: apple_la_union
+    volumes:
+      - apple_la_union_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d apple_la_union"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  apple_la_union_pg:
