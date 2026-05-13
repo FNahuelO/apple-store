@@ -6,12 +6,12 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "dev": "prisma generate && pnpm --dir frontend dev",
-    "build": "prisma generate && pnpm --dir frontend build",
-    "vercel-build": "prisma generate && VERCEL=1 pnpm --dir frontend build",
-    "start": "pnpm --dir frontend start",
+    "dev": "prisma generate && pnpm --dir web dev",
+    "build": "prisma generate && pnpm --dir web build",
+    "vercel-build": "prisma generate && VERCEL_MONOREPO_ROOT=1 pnpm --dir web build",
+    "start": "pnpm --dir web start",
     "postinstall": "prisma generate",
-    "lint": "pnpm --dir frontend lint",
+    "lint": "pnpm --dir web lint",
     "db:generate": "prisma generate",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
