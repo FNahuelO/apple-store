@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate --schema=../prisma/schema.prisma && next build",
+    "build": "cd .. && pnpm exec prisma migrate deploy && pnpm exec prisma generate && cd src && pnpm exec next build",
+    "build:next": "next build",
     "start": "next start",
     "lint": "eslint ."
   },
