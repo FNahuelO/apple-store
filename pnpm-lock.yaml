@@ -37,7 +37,7 @@ importers:
         specifier: ^5
         version: 5.7.3
 
-  web:
+  src:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.9.1

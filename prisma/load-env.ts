@@ -6,4 +6,4 @@ const prismaDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(prismaDir, "..");
 
 loadEnv({ path: path.join(root, ".env") });
-loadEnv({ path: path.join(root, "web", ".env"), override: true });
+loadEnv({ path: path.join(root, "src", ".env"), override: true });

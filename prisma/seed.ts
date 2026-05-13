@@ -1,8 +1,8 @@
 import "./load-env";
-import { PrismaClient } from "../web/generated/prisma/client";
+import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
-import { getDefaultSiteSettings } from "../web/lib/site-settings";
+import { getDefaultSiteSettings } from "../src/lib/site-settings";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
